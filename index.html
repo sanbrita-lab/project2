@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A cozy long-distance relationship date planner.">
+  <title>Our Date Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home">♡ Our Date Planner</a>
+    <nav>
+      <a href="#planner">Planner</a>
+      <a href="#activities">Ideas</a>
+      <a href="#journal">Journal</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">LONG DISTANCE, STILL TOGETHER</p>
+        <h1>So... when are we going on a date?</h1>
+        <p class="hero-text">Distance is annoying. Planning doesn't have to be. Find a time that works, choose a vibe, and let the app plan your next virtual date.</p>
+        <a class="button primary" href="#planner">Plan our date</a>
+      </div>
+      <div class="hero-card">
+        <div class="floating-heart">♡</div>
+        <p class="mini-label">NEXT DATE</p>
+        <h3 id="heroNextDate">Nothing planned yet</h3>
+        <p id="heroNextActivity">Let's fix that.</p>
+      </div>
+    </section>
+
+    <section id="planner" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">01 · FIND A WINDOW</p>
+        <h2>When are you both free?</h2>
+        <p>Pick the days and time windows that work for each of you. The planner will look for overlap.</p>
+      </div>
+
+      <div class="availability-grid">
+        <div class="panel">
+          <div class="panel-title">
+            <h3>My availability</h3>
+            <button class="text-button" onclick="clearAvailability('me')">Clear</button>
+          </div>
+          <div id="meAvailability" class="days"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">
+            <h3>Partner's availability</h3>
+            <button class="text-button" onclick="clearAvailability('partner')">Clear</button>
+          </div>
+          <div id="partnerAvailability" class="days"></div>
+        </div>
+      </div>
+
+      <div class="overlap-box">
+        <div>
+          <p class="mini-label">SHARED WINDOWS</p>
+          <h3 id="overlapSummary">Choose availability above.</h3>
+        </div>
+        <button class="button secondary" onclick="scrollToSection('preferences')">Choose our vibe</button>
+      </div>
+    </section>
+
+    <section id="preferences" class="section soft">
+      <div class="section-heading">
+        <p class="eyebrow">02 · SET THE MOOD</p>
+        <h2>What kind of date are we feeling?</h2>
+      </div>
+
+      <div class="preference-layout">
+        <div class="preference-card">
+          <h3>Vibe</h3>
+          <div class="choice-grid" id="vibeChoices">
+            <button class="choice selected" data-group="vibe" data-value="cozy">Cozy</button>
+            <button class="choice" data-group="vibe" data-value="romantic">Romantic</button>
+            <button class="choice" data-group="vibe" data-value="playful">Playful</button>
+            <button class="choice" data-group="vibe" data-value="creative">Creative</button>
+            <button class="choice" data-group="vibe" data-value="deep">Deep talk</button>
+            <button class="choice" data-group="vibe" data-value="low">Bare-minimum effort</button>
+          </div>
+        </div>
+
+        <div class="preference-card">
+          <h3>Energy</h3>
+          <div class="choice-grid">
+            <button class="choice selected" data-group="energy" data-value="low">Low</button>
+            <button class="choice" data-group="energy" data-value="medium">Medium</button>
+            <button class="choice" data-group="energy" data-value="high">High</button>
+          </div>
+
+          <h3 class="subheading">Time</h3>
+          <div class="choice-grid">
+            <button class="choice selected" data-group="duration" data-value="short">30–60 min</button>
+            <button class="choice" data-group="duration" data-value="medium">1–2 hours</button>
+            <button class="choice" data-group="duration" data-value="long">2+ hours</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="button primary large" onclick="planDate()">✨ Plan our date</button>
+    </section>
+
+    <section id="result" class="section result-section hidden">
+      <div class="date-result">
+        <p class="eyebrow">YOUR DATE IS READY</p>
+        <div class="date-result-grid">
+          <div>
+            <p class="date-time" id="resultDate">Saturday · 8:00 PM</p>
+            <h2 id="resultTitle">Cozy Cinema Date</h2>
+            <p id="resultDescription"></p>
+            <div class="tags">
+              <span id="resultDuration"></span>
+              <span id="resultEnergy"></span>
+              <span id="resultVibe"></span>
+            </div>
+          </div>
+          <div class="date-actions">
+            <button class="button secondary" onclick="planDate()">Give me another</button>
+            <button class="button primary" onclick="saveCurrentDate()">♡ Lock this date</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="activities" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">03 · DATE IDEAS</p>
+        <h2>For the nights when “what do you want to do?” is not cutting it.</h2>
+      </div>
+      <div id="activityGrid" class="activity-grid"></div>
+    </section>
+
+    <section id="journal" class="section soft">
+      <div class="section-heading">
+        <p class="eyebrow">04 · YOUR LITTLE ARCHIVE</p>
+        <h2>Our date journal</h2>
+        <p>Saved dates stay in this browser using local storage. No account or database required.</p>
+      </div>
+      <div id="journalList" class="journal-list"></div>
+      <div class="journal-form panel">
+        <h3>Add a date memory</h3>
+        <div class="form-grid">
+          <input id="memoryTitle" type="text" placeholder="What did you do?">
+          <input id="memoryDate" type="date">
+          <textarea id="memoryNote" placeholder="Favourite moment..."></textarea>
+        </div>
+        <button class="button primary" onclick="addMemory()">Add memory</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made for two people who refuse to let a little distance ruin date night.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
